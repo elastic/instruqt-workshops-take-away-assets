@@ -1,0 +1,215 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-body: 'Inter', sans-serif;
+    --font-heading: 'Inter', sans-serif;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 44%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+
+  body {
+    font-family: var(--font-body);
+    /*background: var(--background);*/
+    color: var(--foreground);
+    background-color: hsl(203, 100%, 20%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer components {
+  .text-primary {
+    color: hsl(var(--primary));
+  }
+}
+
+@layer utilities {
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+}
+
+/* Styles for AI messages */
+.ai-message {
+    background-color: #333; /* Dark gray background */
+    color: #fff; /* White text */
+}
+
+/* Styles for user messages */
+.user-message {
+    background-color: #036; /* Dark blue background */
+    color: #fff; /* White text */
+}
+
+.app-background {
+    background-color: hsl(203, 100%, 33%);
+}
+
+.source-background {
+    background-color: hsl(0, 0%, 33%);
+  color: #fff; /* White text */
+}
+
+.chat-app-container {
+    /*margin-bottom: 50px; !* Adjust the margin size as needed *!*/
+    padding-top: 50px;  /* Top padding of 100px */
+    padding-bottom: 30px; /* Bottom padding of 50px */
+    padding-left: 50px;  /* Left padding, maintain your existing setting */
+    padding-right: 50px; /* Right padding, maintain your existing setting */
+}
+
+/* Ensuring the message area can grow but also has some limits */
+.flex-1 {
+    overflow: auto; /* Already set */
+    flex-grow: 1;
+    max-height: 85%; /* You can adjust this value based on your needs */
+    justify: center;
+    items: center;
+
+}
+
+/* Styling for the input textarea */
+.textarea-chat {
+    border: 1px solid #ccc; /* Light grey border */
+    width: 100%; /* Full width within its container */
+    display: flex;
+    padding: 8px 10px; /* Top and bottom padding of 8px and left and right padding of 10px */
+    border-radius: 4px; /* Rounded corners */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Slight inset shadow for depth */
+    font-size: 16px; /* Adequate font size for readability */
+    color: #333; /* Darker text color for better visibility */
+}
+
+/* Adjust focus styles to increase usability */
+.textarea-chat:focus {
+    border-color: #66afe9; /* Blue border on focus */
+    outline: none; /* Remove default focus outline */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1), 0 0 8px rgba(102, 175, 233, 0.6); /* Enhanced shadow on focus */
+}
+
+/* Styling for the send button */
+.send-button {
+    background-color: #007BFF; /* Blue background */
+    color: #ffffff; /* White text color for the icon */
+    padding: 6px 12px; /* Padding around the text/icon */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    display: flex; /* Use flex to center the icon and text */
+    align-items: center; /* Center alignment of items in the button */
+    justify-content: center; /* Center the content horizontally */
+}
+
+.send-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Styling for the icon inside the button */
+.send-icon {
+    margin-right: 8px; /* Space between the icon and the text */
+}
+.input-container {
+    display: flex;
+    align-items: center;  /* Aligns children vertically in the middle */
+    position: relative;   /* Positions relative to its normal position */
+    width: 100%;          /* Takes full width of its parent */
+}
+
+.textarea {
+    flex: 1;              /* Takes up the remaining space */
+    margin-right: 10px;   /* Adds some space between the textarea and the button */
+}
+
+/*.send-button {*/
+/*    padding: 6px 12px;    !* Adjust padding according to design *!*/
+/*    background-color: #007BFF; !* Blue background *!*/
+/*    color: white;         !* White text *!*/
+/*    border: none;*/
+/*    border-radius: 4px;*/
+/*    cursor: pointer;*/
+/*    flex-shrink: 0;       !* Prevents the button from shrinking *!*/
+/*}*/
+
+/*.send-button:hover {*/
+/*    background-color: #0056b3; !* Darker blue on hover *!*/
+/*}*/
+
+
+.verbose-message {
+    background-color: darkseagreen;
+    color: black;
+}
+
+.verbose-mode-label {
+    color: darkseagreen; /* Set text color to white */
+}
+
+.header-title {
+    width: 100%;
+    padding: 20px;
+    background-color: #f0f0f0; /* Light grey background */
+    text-align: center;
+    border-bottom: 1px solid #ccc; /* Light border for some visual separation */
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1); /* Optional shadow for depth */
+}
+
+.header-title h1 {
+    margin: 0;
+    color: #333; /* Dark grey text */
+    font-size: 24px; /* Suitable font size for header */
+}
+
+.app-container {
+    width: 100%;
+    min-height: 100vh; /* Make sure it takes full height */
+    display: flex;
+    flex-direction: column;
+    /*color: white;*/
+}
+
+.app-header {
+    width: 100%;
+    height: 200px; /* Adjusted for proper fit */
+    color: white; /* Ensure high contrast for visibility */
+    text-align: center;
+    font-size: 24px; /* Adjust font size if needed */
+    line-height: 60px; /* Make sure line height matches the height for vertical centering */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Flexbox for perfect center alignment */
+    border-bottom: 1px solid #ccc;
+}
+
+
+.chat-container {
+    flex-grow: 1;
+    padding: 20px;
+    /* Add any additional styles that were originally applied to the main chat container */
+}
