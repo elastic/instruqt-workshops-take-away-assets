@@ -18,7 +18,7 @@ Prerequisite: the three `precision-*` indices are loaded (see [`data/`](../data/
 3. **Description**: paste the text below. It shapes the automations Context Engine generates and helps agents decide when the index is relevant.
 
 ```text
-Routing context for Precision Labs customer-success data in three Elasticsearch indices: precision-crm-accounts (500 customer accounts with tier, arr = annual recurring revenue in USD, churn risk score, renewal date, and account owner), precision-support-tickets (3,000 support tickets with priority P1 to P4, category, and status; customer_id in accounts joins to account_id in tickets), and precision-kb-articles (150 knowledge base articles by category). Knowledge Indicators describe what each index holds, what its fields mean, how the indices join, and ES|QL query patterns that work. Example questions: Which Enterprise accounts have the highest churn risk, and what are they contacting support about? Which Enterprise accounts renewing in the next 60 days have open P1 tickets, and which knowledge base articles cover their issues? Known gaps: there is no product usage, billing, or contract data, and Knowledge Indicators describe structure and meaning, not live values, so query the source indices for current counts, statuses, and dates.
+Routing context for Precision Labs customer-success data in three Elasticsearch indices: precision-crm-accounts (500 customer accounts with tier, arr = annual recurring revenue in USD, churn risk score, renewal date, and account owner), precision-support-tickets (3,000 support tickets with priority critical, high, medium or low, category, and status; customer_id in accounts joins to account_id in tickets), and precision-kb-articles (150 knowledge base articles by category). Knowledge Indicators describe what each index holds, what its fields mean, how the indices join, and ES|QL query patterns that work. Example questions: Which Enterprise accounts have the highest churn risk, and what are they contacting support about? Which Enterprise accounts renewing in the next 60 days have open critical tickets, and which knowledge base articles cover their issues? Known gaps: there is no product usage, billing, or contract data, and Knowledge Indicators describe structure and meaning, not live values, so query the source indices for current counts, statuses, and dates.
 ```
 
 4. Optional: under **Agent traces**, pick an existing agent whose traces the automation generator may learn from. In the workshop this was a plain baseline agent built in an earlier lab. The workflow in this repo does **not** need traces, so you can skip this.
@@ -102,12 +102,10 @@ You are a customer-success analyst for Precision Labs. Answer questions about ac
 2. Retrieve KIs first via `query_ai_indices` (an ES|QL query against `ai-index-idx-precision-corpus`).
 3. Then expose **only** an ES|QL execution tool for the data itself (`platform.core.execute_esql`, or your framework's equivalent). Fewer tools made the agent's behavior more predictable: KI retrieval first, then targeted ES|QL, with no fallback to schema discovery.
 
-In the workshop this reduced LLM calls per question by roughly half and effective tokens by about 56% versus an agent with no KIs, with about the same answer accuracy. Treat that as a claim to verify on your own data, not a guarantee.
-
 ## Questions to try
 
 ```
 Which Enterprise accounts have the highest churn risk, and what are they mostly calling us about?
-Which Enterprise accounts renewing in the next 60 days have open P1 tickets, and which knowledge base articles cover their issues?
+Which Enterprise accounts renewing in the next 60 days have open critical tickets, and which knowledge base articles cover their issues?
 What is the total ARR of the five accounts you just listed?
 ```
