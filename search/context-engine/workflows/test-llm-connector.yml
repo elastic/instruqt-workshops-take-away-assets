@@ -1,0 +1,23 @@
+# Quick check that your LLM endpoint works: asks the model which model it is.
+# Create the endpoint first: Admin and settings > Model management > Elastic Inference >
+# pick a model > Add endpoint (task type chat_completion), then copy its inference endpoint id.
+# Set connector_id below to that id, save, then Run.
+# Success = ask_model turns green and the output names the model (a Claude answer for a Claude endpoint).
+version: "1"
+name: Test LLM connector
+description: Asks the LLM which model it is. Use to confirm a connector works.
+enabled: true
+consts:
+  connector_id: "<YOUR_LLM_ENDPOINT_ID>"
+triggers:
+  - type: manual
+steps:
+  - name: ask_model
+    type: ai.prompt
+    connector-id: "{{ consts.connector_id }}"
+    with:
+      prompt: "Reply with one short sentence stating which model you are (name and version). Do not add anything else."
+  - name: show_answer
+    type: console
+    with:
+      message: "{{ steps.ask_model.output.content }}"

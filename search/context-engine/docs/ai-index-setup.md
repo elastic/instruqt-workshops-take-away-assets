@@ -34,22 +34,33 @@ On the AI Index's **Overview** tab, find **Sources**, click **Edit**, and under 
 
 Click **Save**. Sources should show 3. (The **Connectors** tab lists technical-preview sources such as Salesforce, Zendesk and Jira; the same AI Index can be fed from those.)
 
-## 3. Generate the Knowledge Indicators with a workflow
+## 3. Create an LLM endpoint and test it
 
-In the **Automations** section of the Overview tab, click **Create automation**. Kibana Workflows opens with a scaffold:
+The KI workflow calls an LLM, so first create a chat-completion endpoint in your project and prove it works. A fresh trial project may have no usable LLM connector, and ids differ per project, so do not reuse an id from someone else's setup.
+
+1. In Kibana open **Admin and settings > Model management > Elastic Inference**.
+2. Open the **Claude Sonnet 5** card (any chat-completion LLM works) and click **Add endpoint**.
+3. Leave the task type as **chat_completion**. Set the **Inference endpoint ID** to something memorable, for example `anthropic-claude-5-sonnet-chat_completion-workshop`, and click **Save**. Copy that id; you will use it as the `connector-id` below.
+4. Open **Workflows**, click **Create workflow**, and choose **Start manually** (not the AI prompt box).
+5. Paste [`workflows/test-llm-connector.yml`](../workflows/test-llm-connector.yml), set `connector_id` to your endpoint id, **Save**, then **Run**.
+6. The `ask_model` step should turn green and the output should contain a one-line answer naming the model (a Claude answer for the endpoint above). If it fails, fix the id before going further.
+
+## 4. Generate the Knowledge Indicators with a workflow
+
+In the **Automations** section of the AI Index's Overview tab, click **Create automation**. Kibana Workflows opens with a scaffold:
 
 1. Select all the scaffold text and delete it.
 2. Paste [`workflows/precision-index-metadata-kis.yml`](../workflows/precision-index-metadata-kis.yml).
-3. Replace `<YOUR_LLM_CONNECTOR_ID>` with the id of a chat-completion connector in your project. Use any chat-completion connector available in your project (list them under **Stack Management > Connectors**). Connector ids differ per project and can be renamed, so do not reuse an id from someone else's setup.
+3. Replace `<YOUR_LLM_ENDPOINT_ID>` with the endpoint id you tested in step 3.
 4. **Save**, then **Run**.
 
 The workflow runs once per source index: it fetches the mapping, samples 20 random documents, runs grounding ES|QL aggregations (counts by category), asks the LLM for a structured index profile constrained to a JSON schema, renders that into a KI, and writes it to the AI Index with `context-engine.createKi`. Three indices finish in about a minute.
 
 Check the result: open `precision-corpus` > **Knowledge Indicators**. The badge should show **3**; open one and read `content`.
 
-**If the workflow fails or the count stays at 0:** use the no-LLM fallback [`workflows/plan-b-write-kis-no-llm.yml`](../workflows/plan-b-write-kis-no-llm.yml). It writes the same three KIs directly with `elasticsearch.request`, in seconds. This assumes the AI Index is named `precision-corpus`.
+**If the workflow fails or the count stays at 0:** open the execution panel and look at which step failed. The most common cause is the `generate_index_profile` step: re-run the test workflow from step 3 with the same id to confirm the endpoint works. The step retries 3 times on its own. Also confirm the three `precision-*` indices are loaded and the AI Index is named `precision-corpus` (the workflow's `ai_index_id`).
 
-## 4. Inspect and edit the KIs
+## 5. Inspect and edit the KIs
 
 KIs are ordinary Elasticsearch documents. In Discover (ES|QL mode, time range wide enough to include when you ran the workflow):
 
@@ -83,7 +94,7 @@ POST ai-index-idx-precision-corpus/_update/precision-crm-accounts
 
 Re-run the workflow whenever source schemas or data distributions change; it is rerunnable and schedulable.
 
-## 5. Use the Context Engine from an agent
+## 6. Use the Context Engine from an agent
 
 The AI Index exposes three tools, available to any agent that can call Elastic tools (Agent Builder agents get them when the AI Index is assigned; for an external agent such as one in Azure AI Foundry, you need to expose them through whatever Elastic tool interface you connect it with, which this repo does not cover):
 
