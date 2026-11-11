@@ -1,5 +1,6 @@
-# Replace <YOUR_LLM_CONNECTOR_ID> with the id of a chat-completion connector in your project
-# (Kibana > Stack Management > Connectors; the id is shown in the connector's details).
+# Replace <YOUR_LLM_ENDPOINT_ID> with the id of a chat-completion endpoint you created in your
+# project (Admin and settings > Model management > Elastic Inference > Add endpoint).
+# Test it first with test-llm-connector.yml.
 version: "1"
 name: Precision Labs index metadata KIs
 description: >
@@ -66,7 +67,7 @@ steps:
 
       - name: generate_index_profile
         type: ai.prompt
-        connector-id: <YOUR_LLM_CONNECTOR_ID>
+        connector-id: <YOUR_LLM_ENDPOINT_ID>
         on-failure:
           retry:
             max-attempts: 3

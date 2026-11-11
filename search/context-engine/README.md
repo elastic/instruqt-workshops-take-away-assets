@@ -7,8 +7,8 @@ The Elastic pieces of the **Context Engine / Knowledge Retrieval** workshop, for
 | Path | What it is |
 |---|---|
 | `docs/ai-index-setup.md` | Step-by-step: create the AI Index, add sources, generate Knowledge Indicators, inspect/edit them, and how an agent should use them |
+| `workflows/test-llm-connector.yml` | Tiny workflow that asks your LLM endpoint which model it is. Run it first to prove the endpoint works |
 | `workflows/precision-index-metadata-kis.yml` | The Kibana Workflow you paste into the Context Engine "Create automation" editor. Profiles each index with an LLM and writes one KI per index |
-| `workflows/plan-b-write-kis-no-llm.yml` | Fallback workflow that writes the same three KIs with no LLM step |
 | `data/crm_dataset.py`, `support_tickets_dataset.py`, `kb_articles_dataset.py` | Deterministic (seed 42) generators for the dataset. Each also indexes its data |
 | `data/load_data.sh` | Runs all three generators in the right order and prints document counts |
 
@@ -32,7 +32,7 @@ No data files are committed; it is generated at load time, so the repo stays sma
    cd data && ./load_data.sh
    ```
    Expect counts of 500 / 3000 / 150. The script deletes and recreates the three `precision-*` indices.
-3. **Create the AI Index, add sources, run the workflow**: follow [`docs/ai-index-setup.md`](docs/ai-index-setup.md). Before running the workflow, replace `<YOUR_LLM_CONNECTOR_ID>` in the YAML with a chat-completion connector id from your project.
+3. **Create the AI Index, add sources, run the workflow**: follow [`docs/ai-index-setup.md`](docs/ai-index-setup.md). Create an LLM endpoint (Elastic Inference > Add endpoint), prove it with `workflows/test-llm-connector.yml`, then use its id in place of `<YOUR_LLM_ENDPOINT_ID>` in the KI workflow.
 4. **Confirm 3 Knowledge Indicators** exist in `ai-index-idx-precision-corpus`.
 5. **Connect your agent** (yours, not covered here). Have it retrieve KIs with the Context Engine tools (`list_ai_indices`, `describe_ai_index`, `query_ai_indices`) first, then run targeted ES|QL against the `precision-*` indices.
 
